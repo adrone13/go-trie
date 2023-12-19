@@ -7,22 +7,22 @@ const (
 	alphabet    = 26
 )
 
-type TrieNode struct {
-	IsWordEnd bool
-	Children  []*TrieNode
+type trieNode struct {
+	isWordEnd bool
+	children  []*trieNode
 }
 
 type Trie struct {
 	alphabet int
-	root     *TrieNode
+	root     *trieNode
 }
 
 func New() *Trie {
 	return &Trie{alphabet, newNode(false, alphabet)}
 }
 
-func newNode(isWordEnd bool, size int) *TrieNode {
-	return &TrieNode{isWordEnd, make([]*TrieNode, size)}
+func newNode(isWordEnd bool, size int) *trieNode {
+	return &trieNode{isWordEnd, make([]*trieNode, size)}
 }
 
 func (t *Trie) Insert(s string) {
@@ -34,13 +34,13 @@ func (t *Trie) Insert(s string) {
 
 	for i, r := range s {
 		k := runeToNodeKey(r)
-		node := p.Children[k]
+		node := p.children[k]
 		isLast := i == len(s)-1
 
 		if node == nil {
 			n := newNode(isLast, t.alphabet)
 
-			p.Children[k] = n
+			p.children[k] = n
 			p = n
 		}
 	}
@@ -53,22 +53,17 @@ func (t *Trie) Search(s string) bool {
 
 	p := t.root
 
-	for i, r := range s {
+	for _, r := range s {
 		k := runeToNodeKey(r)
-		node := p.Children[k]
+		node := p.children[k]
 		if node == nil {
-			return false
-		}
-
-		isLast := i == len(s)-1
-		if isLast && !node.IsWordEnd {
 			return false
 		}
 
 		p = node
 	}
 
-	return true
+	return p.isWordEnd
 }
 
 func (t *Trie) StartsWith(s string) bool {
@@ -80,7 +75,7 @@ func (t *Trie) StartsWith(s string) bool {
 
 	for _, r := range s {
 		k := runeToNodeKey(r)
-		node := p.Children[k]
+		node := p.children[k]
 		if node == nil {
 			return false
 		}
@@ -96,14 +91,14 @@ func (t *Trie) Print() {
 	print(t.root, 0)
 }
 
-func print(n *TrieNode, level int) {
+func print(n *trieNode, level int) {
 	var indent string
 
 	for i := 0; i <= level; i++ {
 		indent += "-"
 	}
 
-	for i, cn := range n.Children {
+	for i, cn := range n.children {
 		if cn != nil {
 			fmt.Println(indent + keyToString(rune(i)))
 
