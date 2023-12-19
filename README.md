@@ -4,7 +4,7 @@ All strings stored in trie that have the same prefix also have common nodes.
 The main feature of trie is the pattern matching in O(n) time, where n - length of the input.
 
 ## Example
-```
+```Go
 func main() {
 	t := trie.New()
 
@@ -21,7 +21,8 @@ func main() {
 }
 ```
 ## Output
-```
+```bash
+$ make run
 Has word address: true
 Has prefix add:   true
 Has word odd:     false
