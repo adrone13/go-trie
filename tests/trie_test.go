@@ -28,8 +28,4 @@ func TestTrie(t *testing.T) {
 	if trie.StartsWith("xyz") != false {
 		t.Errorf("expected to return true")
 	}
-
-	// if resp.StatusCode != http.StatusOK {
-	// 	t.Errorf("expected status OK; got %v", resp.Status)
-	// }
 }
